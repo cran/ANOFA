@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>What is Analysis of Frequency Data?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">What is Analysis of Frequency Data?</h1>
+
+
+
+<p>The <em>ANalysis Of Frequency datA</em> (ANOFA) is a framework for
+analyzing frequencies (a.k.a. counts) of classification data. This
+framework is very similar to the well-known ANOVA and uses the same
+general approach. It allows analyzing <em>main effects</em> and
+_interaction effects_It also allow analyzing <em>simple effects</em> (in
+case of interactions) as well as <em>orthogonal contrats</em>. Further,
+ANOFA makes it easy to generate frequency plots which includes
+confidence intervals, and to compute <em>eta-square</em> as a measure of
+effect size. Finally, power planning is easy within ANOFA.</p>
+<div id="a-basic-example" class="section level2">
+<h2>A basic example</h2>
+<p>As an example, suppose that you observe a class of primary school
+students, trying to ascertain the different sorts of behaviors. You
+might use an obsrevation grid where, for every kid observed, you check
+various things, such as</p>
+<table>
+<colgroup>
+<col width="40%" />
+<col width="59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Student Id: A</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Gender:</strong></td>
+<td>Boy [<strong>x</strong>] Girl [ ] Other [ ]</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Type of interplay:</strong></td>
+<td>Play alone [<strong>x</strong>] Play in group [ ] Harrass others [ ]
+Shout against other [ ]</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>etc.</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>This grid categorizes the participants according to two factors,
+<code>Gender</code>, and <code>TypeOfInterplay</code>.</p>
+<p>From these observations, one may wish to know if gender is more
+related to one type of interplay. Alternatively, genders could be evenly
+spread across types of interplay. In the second case, there is no
+<em>interaction</em> between the factors.</p>
+</div>
+<div id="some-data" class="section level2">
+<h2>Some data</h2>
+<p>Once collected through observations, the data can be formated in one
+of many ways (see the vignette <a href="https://dcousin3.github.io/ANOFA/articles/DataFormatsForFrequencies.html">Data
+formats</a>). The raw format could look like</p>
+<table>
+<thead>
+<tr class="header">
+<th>Id</th>
+<th>boy</th>
+<th>girl</th>
+<th>other</th>
+<th>alone</th>
+<th>in-group</th>
+<th>harass</th>
+<th>shout</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>For a more compact representation, the data could be
+<em>compiled</em> into a table with all the combination of gender <span class="math inline">\(\times\)</span> types of interplay, hence
+resulting in 12 cells. The results (totally ficticious) looks like
+(assuming that they are stored in a data.frame named
+<code>dta</code>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>dta</span></code></pre></div>
+<pre><code>##    Gender TypeOfInterplay Freq
+## 1     boy           alone   10
+## 2    girl           alone   55
+## 3   other           alone   13
+## 4     boy         ingroup   54
+## 5    girl         ingroup   25
+## 6   other         ingroup   11
+## 7     boy         harrass    8
+## 8    girl         harrass   44
+## 9   other         harrass    8
+## 10    boy           shout   12
+## 11   girl           shout   47
+## 12  other           shout   13</code></pre>
+<p>for a grand total of 300 childs observed.</p>
+</div>
+<div id="analyzing-the-data" class="section level2">
+<h2>Analyzing the data</h2>
+<p>The frequencies can be analyzed using the <em>Analysis of Frequency
+Data</em> (ANOFA) framework <span class="citation">(Laurencelle &amp;
+Cousineau, 2023)</span>. This framework only assumes that the population
+is <em>multinomial</em> (which means that the population has certain
+probabilities for each cell). The relevant test statistic is a <span class="math inline">\(G\)</span> statistic, whose significance is
+assessed using a chi-square table.</p>
+<p><em>ANOFA</em> works pretty much the same as an <em>ANOFA</em> except
+that instead of looking at the means in each cell, its examines the
+count of observations in each cell.</p>
+<p>To run an analysis of the data frame <code>dta</code>, simply
+use:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(ANOFA)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">anofa</span>(Freq <span class="sc">~</span> Gender <span class="sc">*</span> TypeOfInterplay, <span class="at">data =</span> dta) </span></code></pre></div>
+<p>This is it. The formula indicates that the counts are stored in
+column <code>Freq</code> and that the factors are <code>Gender</code>
+and <code>TypeOfInterplay</code>, each stored in its own column. (if
+your data are organized differently, see <a href="https://dcousin3.github.io/ANOFA/articles/DataFormatsForFrequencies.html">Data
+formats</a>).</p>
+<p>At this point, you might want a plot showing the counts on the
+vertical axis:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">anofaPlot</span>(w) </span></code></pre></div>
+<div class="float">
+<img src="data:image/png;base64,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" alt="Figure 1. The frequencies of the ficticious data as a function of Gender and Type of Interplay. Error bars show difference-adjusted 95% confidence intervals." />
+<div class="figcaption"><strong>Figure 1</strong>. The frequencies of
+the ficticious data as a function of Gender and Type of Interplay. Error
+bars show difference-adjusted 95% confidence intervals.</div>
+</div>
+<p>We can note a strong interaction, the <code>ingroup</code> activity
+not being distributed the same as a function of <code>Gender</code>. To
+confirm the interaction, let’s look at the ANOFA table:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">summary</span>(w)</span></code></pre></div>
+<pre><code>##                              G df Gcorrected  pvalue   etasq
+## Total                  154.520 11         NA      NA      NA
+## Gender                  82.324  2     82.141 0.00000 0.21532
+## TypeOfInterplay          6.281  3      6.263 0.09948 0.02051
+## Gender:TypeOfInterplay  65.916  6     65.055 0.00000 0.33996</code></pre>
+<p>Indeed, the interaction (last line) is significant (<span class="math inline">\(G(6) = 65.92\)</span>, <span class="math inline">\(p &lt; .001\)</span>). The <span class="math inline">\(G\)</span> statistics is corrected for small
+sample but the correction is typically small (as seen in the fourth
+column).</p>
+<p>We might want to examine whether the frequencies of interplay are
+equivalent separately for each <code>Gender</code>, even though
+examination of the plot suggest that it is only the case for the
+<code>other</code> gender. This is achieved with an analysis of the
+<em>simple effects</em> of <code>TypeOfInterplay</code> within each
+level of <code>Gender</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">emFrequencies</span>(w, Freq <span class="sc">~</span> TypeOfInterplay <span class="sc">|</span> Gender)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">summary</span>(e)</span></code></pre></div>
+<pre><code>##                              G df Gcorrected   pvalue   etasq
+## TypeOfInterplay | boy   58.291  3     58.130 0.000000 0.40966
+## TypeOfInterplay | girl  12.337  3     12.303 0.002131 0.06729
+## TypeOfInterplay | other  1.569  3      1.565 0.457342 0.03369</code></pre>
+<p>As seen, for boys and girls, the type of interplay differ
+significantly (both <span class="math inline">\(p &lt; .002\)</span>);
+for <code>others</code>, as expected from the plot, this is not the case
+(<span class="math inline">\(G(3) = 1.57\)</span>, <span class="math inline">\(p = 0.46\)</span>).</p>
+<p>If really, you need to confirm that the major difference is caused by
+the <code>ingroup</code> type of activity (in these ficticious data),
+you could follow-up with a contrast analysis. We might compare
+<code>alone</code> to <code>harass</code>, both to <code>shout</code>,
+and finally the three of them to <code>ingroup</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">contrastFrequencies</span>(e, <span class="fu">list</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="st">&quot;alone vs. harass                     &quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,    <span class="dv">0</span>, <span class="sc">+</span><span class="dv">1</span>,    <span class="dv">0</span>  ),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="st">&quot;(alone &amp; harass) vs. shout           &quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,  <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="sc">+</span><span class="dv">1</span>  ),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="st">&quot;(alone &amp; harass &amp; shout) vs. in-group&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="sc">+</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    </span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>))</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">summary</span>(f)</span></code></pre></div>
+<pre><code>##                                                       G df Gcorrected   pvalue
+## alone vs. harass                      | boy    0.222682  1   0.220494 0.638664
+## (alone &amp; harass) vs. shout            | boy    0.582739  1   0.577014 0.447485
+## (alone &amp; harass &amp; shout) vs. in-group | boy   57.485613  1  56.920921 0.000000
+## alone vs. harass                      | girl   1.224750  1   1.218810 0.269594
+## (alone &amp; harass) vs. shout            | girl   0.086118  1   0.085700 0.769716
+## (alone &amp; harass &amp; shout) vs. in-group | girl  11.025872  1  10.972400 0.000925
+## alone vs. harass                      | other  1.201987  1   1.180133 0.277329
+## (alone &amp; harass) vs. shout            | other  0.359564  1   0.353027 0.552405
+## (alone &amp; harass &amp; shout) vs. in-group | other  0.007444  1   0.007309 0.931869</code></pre>
+<p>Because the contrast analysis is based on the simple effects within
+<code>Gender</code> (variable <code>e</code>), we get three contrasts
+for each gender. As seen, for boys, <code>in-group</code> is the sole
+condition triggering the difference. Same for girls. Finally, there are
+no difference for the last group.</p>
+</div>
+<div id="additivity-of-the-decomposition-optional" class="section level2">
+<h2>Additivity of the decomposition (optional)</h2>
+<p>The main advandage of ANOFA is that all the decomposition are
+entirely additive.</p>
+<p>If, for example, you sum the <span class="math inline">\(G\)</span>s
+and degrees of freedom of the contrasts, with e.g.,</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(f)[,<span class="dv">1</span>])  <span class="co"># Gs</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(f)[,<span class="dv">2</span>])  <span class="co"># degrees of freedom</span></span></code></pre></div>
+<pre><code>## [1] 72.19677
+## [1] 9</code></pre>
+<p>you get exacly the same as the simple effects:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(e)[,<span class="dv">1</span>])  <span class="co"># Gs</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(e)[,<span class="dv">2</span>])  <span class="co"># degrees of freedom</span></span></code></pre></div>
+<pre><code>## [1] 72.19677
+## [1] 9</code></pre>
+<p>which is also the same as the main analysis done first, adding the
+main effect of <code>TypeOfInterplay</code> and its interaction with
+<code>Gender</code> (lines 3 and 4):</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(w)[<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>),<span class="dv">1</span>])  <span class="co"># Gs</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">summary</span>(w)[<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>),<span class="dv">2</span>])  <span class="co"># degrees of freedom</span></span></code></pre></div>
+<pre><code>## [1] 72.19677
+## [1] 9</code></pre>
+<p>In other words, <strong>the decompositions preserved all the
+information available</strong>. This is the defining characteristic of
+ANOFA.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-lc23b" class="csl-entry">
+Laurencelle, L., &amp; Cousineau, D. (2023). Analysis of frequency
+tables: The ANOFA framework. <em>The Quantitative Methods for
+Psychology</em>, <em>19</em>, 173–193. <a href="https://doi.org/10.20982/tqmp.19.2.p173">https://doi.org/10.20982/tqmp.19.2.p173</a>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
