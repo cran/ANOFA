@@ -14,7 +14,7 @@ An object of class list.
 Detergent
 }
 \description{
-The data, taken from \insertCite{rs63}{ANOFA}, is a dataset examining
+The data, taken from \insertCite{rs63;textual}{ANOFA}, is a dataset examining
 the distribution of a large sample of customers, classified over
 four factors:
 \verb{Softness of water used} (3 levels: soft, medium or hard),
@@ -29,6 +29,7 @@ cold). It is therefore a 3 × 2 × 2 × 2 design with 24 cells.
 dta <- data.frame(Detergent)
 
 # run the anofa analysis
+\dontrun{
 w <- anofa( Freq ~  Temperature * M_User * Preference * Water_softness, dta)
 
 # make a plot with all the factors
@@ -40,7 +41,7 @@ anofaPlot(w, ~ Temperature )
 
 # extract simple effects
 e <- emFrequencies(w, ~ M_User | Preference ) 
-
+}
 
 }
 \references{

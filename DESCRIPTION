@@ -1,8 +1,8 @@
 Package: ANOFA
 Type: Package
 Title: Analyses of Frequency Data
-Version: 0.1.2
-Date: 2023-11-16
+Version: 0.1.3
+Date: 2023-11-17
 Authors@R: c(
              person("Denis", "Cousineau", email = "denis.cousineau@uottawa.ca",
                     role = c("aut", "cre")),
@@ -42,6 +42,6 @@ Imports: rrapply (>= 1.2.6), superb (>= 0.95.0), Rdpack (>= 0.7),
 Suggests: rmarkdown, testthat, knitr
 RdMacros: Rdpack
 NeedsCompilation: no
-Packaged: 2023-11-16 22:33:44 UTC; Denis Cousineau
+Packaged: 2023-11-17 19:57:14 UTC; Denis Cousineau
 Repository: CRAN
-Date/Publication: 2023-11-17 08:34:01 UTC
+Date/Publication: 2023-11-18 14:20:08 UTC
